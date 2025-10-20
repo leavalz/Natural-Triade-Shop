@@ -1,11 +1,11 @@
 #Requerimientos considerados inicialmente
-fastapi==0.104.1 #web framework for building APIs with Python based on standard Python type hints
-uvicorn[standard]==0.24.0 #ASGI (Asynchronous Server Gateway Interface) web server implementation for Python.
-sqlalchemy==2.0.23 #Python SQL toolkit and Object Relational Mapper
+fastapi==0.119.1 #web framework for building APIs with Python based on standard Python type hints
+uvicorn[standard]==0.38.0 #ASGI (Asynchronous Server Gateway Interface) web server implementation for Python.
+sqlalchemy==2.0.44 #Python SQL toolkit and Object Relational Mapper
 pydantic==2.12.3 #Data validation using Python type hints.
 pydantic-settings==2.11.0 #Settings management using Pydantic.
-python-dotenv==1.0.0 #Reads key-value pairs from a .env file and can set them as environment variables.
+python-dotenv==1.1.1 #Reads key-value pairs from a .env file and can set them as environment variables.
 
 #Requerimientos para realizar testing
-pytest==7.4.3 #Makes it easy to write small tests, yet scales to support complex functional testing for applications and libraries.
-httpx==0.25.2 #Fully featured HTTP client library for Python 3.
+pytest==8.4.2 #Makes it easy to write small tests, yet scales to support complex functional testing for applications and libraries.
+httpx==0.28.1#Fully featured HTTP client library for Python 3.
