@@ -9,7 +9,7 @@ class ProductBase(BaseModel):
 class ProductCreate(ProductBase):
     pass
 
-class ProductResponse (ProductBase):
+class ProductResponse(ProductBase):
     id: int 
     is_active: bool
 
