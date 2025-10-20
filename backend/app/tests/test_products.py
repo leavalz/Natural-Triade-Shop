@@ -32,3 +32,24 @@ def test_get_product(client):
 def test_get_nonexistent_product(client):
     response = client.get("/products/5000")
     assert response.status_code == 404
+
+def test_filter_by_category(client):
+    client.post("/products/", json={
+        "name": "Test Product Facial",
+        "description": "Test Description",
+        "price": 7000,
+        "stock": 5,
+        "category": "facial"
+    })
+    client.post("/products/", json={
+        "name": "Test Product Cabello",
+        "description": "Test Description",
+        "price": 10000,
+        "stock": 10,
+        "category": "cabello"
+    })
+
+    response = client.get("/products/?category=facial")
+    assert response.status_code == 200
+    assert len(response.json()) == 1
+    assert response.json()[0]["category"] == "facial"
