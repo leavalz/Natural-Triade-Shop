@@ -4,14 +4,21 @@ from typing import List
 
 from app.core.database import get_db
 from app.models.product import Product
-from app.schemas.product import ProductCreate, ProductResponse
+from app.schemas.product import ProductCreate, ProductResponse, ProductCategoryEnum
 
 router = APIRouter()
 
 @router.get("/", response_model=List[ProductResponse]) #Obtener todos los productos activos
-def get_products(db: Session = Depends(get_db)):
-    products = db.query(Product).filter(Product.is_active == True).all()
-    return products
+def get_products(
+    db: Session = Depends(get_db),
+    category: ProductCategoryEnum | None = None
+):
+    query = db.query(Product).filter(Product.is_active == True)
+
+    if category:
+        query = query.filter(Product.category == category.value)
+
+    return query.all()
 
 @router.post("/", response_model=ProductResponse)
 def create_product(
