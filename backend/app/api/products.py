@@ -68,7 +68,7 @@ def update_product(
     product_update: ProductUpdate,
     db: Session = Depends(get_db)
 ):
-    product = db.query(Product).filtert(Product.id == product_id).first()
+    product = db.query(Product).filter(Product.id == product_id).first()
 
     if not product:
         raise HTTPException(status_code=404, detail="Producto no encontrado")
