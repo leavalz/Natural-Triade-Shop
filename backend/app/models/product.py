@@ -1,6 +1,7 @@
 from sqlalchemy import Column, Integer, String, Float, Boolean, Enum, Text
 import enum
 from app.core.database import Base
+from sqlalchemy.orm import relationship
 
 class ProductCategory(str, enum.Enum):
     FACIAL = "facial"
@@ -19,3 +20,5 @@ class Product(Base):
     category = Column(Enum(ProductCategory), nullable=True, index=True)
     image_url = Column(String(500), nullable=True)
     image_urls = Column(Text, nullable=True)
+
+    cart_items = relationship("CartItem", back_populates="product")
