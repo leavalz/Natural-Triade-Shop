@@ -25,3 +25,24 @@ def client():
         yield c
     Base.metadata.drop_all(bind=engine)
     
+@pytest.fixture
+def test_user(client):
+    response = client.post("/auth/register", json={
+        "email": "testuser@example.com",
+        "username": "testuser",
+        "full_name": "Test User",
+        "password": "TestPass123!"
+    })
+    return response.json()
+
+@pytest.fixture
+def auth_token(client, test_user):
+    response = client.post("/auth/login", data={
+        "username": "testuser",
+        "password": "TestPass123!"
+    })
+    return response.json()["access_token"]
+
+@pytest.fixture
+def auth_headers(auth_token):
+    return {"Authorization": f"Bearer {auth_token}"}
