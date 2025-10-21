@@ -11,5 +11,5 @@ pytest==8.4.2 #Makes it easy to write small tests, yet scales to support complex
 httpx==0.28.1 #Fully featured HTTP client library for Python 3.
 
 python-jose[cryptography]==3.5.0
-passlib[bcrypt]==1.7.4
+argon2-cffi==25.1.0
 python-multipart==0.0.20
