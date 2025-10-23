@@ -17,6 +17,7 @@ class User(Base):
     last_login = Column(DateTime, nullable=True)
 
     cart_items = relationship("CartItem", back_populates="user", cascade="all, delete-orphan")
+    orders = relationship("Order", back_populates="user", cascade="all, delete-orphan")
 
     def __repr__(self):
         return f"<User(username='{self.username}', email='{self.email}')>"
