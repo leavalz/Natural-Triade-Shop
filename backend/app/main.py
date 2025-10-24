@@ -1,6 +1,6 @@
 from fastapi import FastAPI
 from app.core.database import Base, engine
-from app.api import products, auth, cart, order, payments
+from app.api import products, auth, cart, order, payments, admin
 
 Base.metadata.create_all(bind=engine)
 
@@ -11,6 +11,7 @@ app.include_router(auth.router, prefix="/auth", tags=["Authentication"])
 app.include_router(cart.router, prefix="/cart", tags=["Cart"])
 app.include_router(order.router, prefix="/orders", tags=["Orders"])
 app.include_router(payments.router, prefix="/payments", tags=["Payments"])
+app.include_router(admin.router, prefix="/admin", tags=["Admin"])
 
 @app.get("/")
 def root():

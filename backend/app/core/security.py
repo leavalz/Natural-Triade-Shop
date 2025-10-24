@@ -59,3 +59,16 @@ async def get_current_user(
         raise credentials_exception
     
     return user
+
+async def get_current_admin(
+    current_user = Depends(get_current_user)
+):
+    from app.models.user import UserRole
+    
+    if current_user.role != UserRole.ADMIN:
+        raise HTTPException(
+            status_code=status.HTTP_403_FORBIDDEN,
+            detail="No tienes permisos de administrador"
+        )
+    
+    return current_user

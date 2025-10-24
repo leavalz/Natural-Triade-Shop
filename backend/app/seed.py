@@ -1,12 +1,38 @@
 from app.core.database import SessionLocal, engine, Base
 from app.models.product import Product, ProductCategory
+from app.models.user import User, UserRole
+from app.core.security import get_password_hash
 
 def clear_data():
     db = SessionLocal()
     db.query(Product).delete()
+    db.query(User).delete()
     db.commit()
     db.close()
     print("Datos eliminados de la base de datos")
+
+
+def seed_admin_user():
+    """Crear usuario administrador"""
+    db = SessionLocal()
+    
+    admin = User(
+        email="admin@naturaltriade.com",
+        username="admin",
+        full_name="Administrador",
+        hashed_password=get_password_hash("Admin123!"),
+        role=UserRole.ADMIN,
+        is_active=True,
+        is_verified=True
+    )
+    
+    db.add(admin)
+    db.commit()
+    print("✅ Usuario admin creado:")
+    print("   Email: admin@naturaltriade.com")
+    print("   Username: admin")
+    print("   Password: Admin123!")
+    db.close()
 
 
 def seed_products():
@@ -62,7 +88,7 @@ def seed_products():
             "name": "Champú de Argán",
             "description": "Champú reparador con aceite de argán. Cabello suave y brillante.",
             "price": 10000,
-            "stock": 80,
+            "stock": 2,  # Stock bajo para testing
             "category": ProductCategory.CABELLO,
             "image_url": "https://example.com/image.jpg"
         },
@@ -73,18 +99,19 @@ def seed_products():
         db.add(product)
     
     db.commit()
-    print(f"{len(products_data)} productos creados")
+    print(f"✅ {len(products_data)} productos creados")
     db.close()
 
 def main():
-    print("Iniciando seed de la base de datos")
+    print("🌱 Iniciando seed de la base de datos")
     Base.metadata.create_all(bind=engine)
 
     clear_data()
     
+    seed_admin_user()
     seed_products()
 
-    print("Seed completado")
+    print("✅ Seed completado exitosamente!")
 
 
 if __name__ == "__main__":
