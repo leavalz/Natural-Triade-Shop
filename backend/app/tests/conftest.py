@@ -1,5 +1,5 @@
 import pytest
-from fastapi.testclient import TestClient #This class allows for making requests to your FastAPI application directly in a testing environment without requiring an actual HTTP server or network connection.
+from fastapi.testclient import TestClient
 from sqlalchemy import create_engine 
 from sqlalchemy.orm import sessionmaker
 from app.main import app

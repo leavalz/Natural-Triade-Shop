@@ -1,28 +1,36 @@
 import pytest
 
 
-@pytest.fixture
+@pytest.fixture(scope="function")
 def admin_user(client):
     """Create an admin user"""
-    from app.core.database import SessionLocal
+    from app.tests.conftest import TestingSessionLocal
     from app.models.user import User, UserRole
-    from app.core.security import get_password_hash
     
-    db = SessionLocal()
-    admin = User(
-        email="admin@test.com",
-        username="admintest",
-        full_name="Admin User",
-        hashed_password=get_password_hash("AdminPass123!"),
-        role=UserRole.ADMIN,
-        is_active=True
-    )
-    db.add(admin)
-    db.commit()
-    db.refresh(admin)
-    db.close()
+    # Registrar admin usando el endpoint de registro
+    response = client.post("/auth/register", json={
+        "email": "admin@test.com",
+        "username": "admintest",
+        "full_name": "Admin User",
+        "password": "AdminPass123!"
+    })
     
-    return admin
+    # Verificar que se creó correctamente
+    assert response.status_code == 201
+    user_data = response.json()
+    
+    # Actualizar el rol a ADMIN directamente en la base de datos de prueba
+    db = TestingSessionLocal()
+    try:
+        user = db.query(User).filter(User.email == "admin@test.com").first()
+        if user:
+            user.role = UserRole.ADMIN
+            db.commit()
+            db.refresh(user)
+    finally:
+        db.close()
+    
+    return user_data
 
 
 @pytest.fixture
@@ -32,7 +40,13 @@ def admin_token(client, admin_user):
         "username": "admintest",
         "password": "AdminPass123!"
     })
-    return response.json()["access_token"]
+    
+    # Verificar que el login fue exitoso
+    assert response.status_code == 200
+    data = response.json()
+    assert "access_token" in data
+    
+    return data["access_token"]
 
 
 @pytest.fixture
