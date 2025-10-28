@@ -1,10 +1,20 @@
 from fastapi import FastAPI
+from fastapi.middleware.cors import CORSMiddleware
 from app.core.database import Base, engine
 from app.api import products, auth, cart, order, payments, admin
 
 Base.metadata.create_all(bind=engine)
 
 app = FastAPI(title="Natural Triade API", description="API para tienda e-commerce Natural Triade")
+
+# Configurar CORS
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=["http://localhost:5173", "http://localhost:3000"],  # URLs del frontend
+    allow_credentials=True,
+    allow_methods=["*"],
+    allow_headers=["*"],
+)
 
 app.include_router(products.router, prefix="/products", tags=["Products"])
 app.include_router(auth.router, prefix="/auth", tags=["Authentication"])
